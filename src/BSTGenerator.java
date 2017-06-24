@@ -90,17 +90,14 @@ public class BSTGenerator {
 		return avgHeight;
 	}
 	
-	private void createRandomTreeAndCheckFor(String s){
-		String[] list = createList();
-		BSBalancedTree tree = new BSBalancedTree();
-		for(int j = 0; j < list.length; j++){
-			tree.InsertNew(list[j]);
-		}
+	private void createRandomTreeAndCheckFor(String s, BSBalancedTree tree){
 		int matchesAtLevel[] = new int[tree.Height(tree.root)];
 		checkMatchAt(tree.root, 1, tree.Height(tree.root), matchesAtLevel, s);
+		System.out.println("Inorder traversal for Tree:\n");
 		tree.inOrderTraversal(tree.root);
+		System.out.println("\n");
 		for(int i = 0; i < matchesAtLevel.length; i++)
-			System.out.println("there were "+matchesAtLevel[i]+" matches at level "+(i+1));
+			System.out.println("\nNo. of matches: "+matchesAtLevel[i]+" At level "+(i+1)+" For string: "+s);
 	}
 	
 	private void checkMatchAt(BSTNode node, int level, int height, int matchesAtLevel[], String match){
@@ -115,19 +112,28 @@ public class BSTGenerator {
 	}
 	
 	private void run(){
-		System.out.println("=================================================\n   Calculating Avg Height........................  \n=================================================");
+		System.out.println("=================================================\n   Calculating Avg Height........................\n=================================================");
 		double avg = calculateAvgHeight();
 		System.out.println("\n   Avg Height = "+avg+"\n");
-		System.out.println("=================================================\n   Calculating Avg Height For Balanced Tree...... \n=================================================");
+		System.out.println("=================================================\n   Calculating Avg Height For Balanced Tree......\n=================================================");
 		avg = calculateAvgHeightForBalancedTree();
 		System.out.println("\n   Avg Height (Balanced Tree)= "+avg+"\n");
 		Scanner S = new Scanner(System.in);
+		String[] list = createList();
+		BSBalancedTree tree = new BSBalancedTree();
+		for(int j = 0; j < list.length; j++){
+			tree.InsertNew(list[j]);
+		}
 		while(true){
-			System.out.println("please Enter a String to match (spaces not allowed, all lower case, tpe \"quit\" to exit)");
-			String match = S.next();
+			System.out.println("\nplease Enter a String to match (spaces not allowed, all lower case, type \"quit\" to exit)");
+			String match = S.nextLine();
+			if(!match.matches("[a-z]+")){
+				System.out.println("Invalid Entry");
+				continue;
+			}
 			if(match.equalsIgnoreCase("quit"))
 				break;
-			createRandomTreeAndCheckFor(match);
+			createRandomTreeAndCheckFor(match,tree);
 		}
 		S.close();
 	}
